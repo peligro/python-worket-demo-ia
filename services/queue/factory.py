@@ -67,14 +67,7 @@ def get_queue_backend(payload_type: Type[T] = JobPayload) -> QueueBackend[T]:
 def get_queue_backends(payload_type: Type[T] = JobPayload) -> list[QueueBackend[T]]:
     """
     Factory: retorna lista de backends configurados en QUEUE_PROVIDERS.
-    
-    Args:
-        payload_type: Tipo Pydantic para serialización/deserialización
-    
-    Returns:
-        Lista de instancias QueueBackend[payload_type]
     """
-    # Soporte para QUEUE_PROVIDERS (múltiples) o QUEUE_PROVIDER (single, legacy)
     providers_str = os.getenv("QUEUE_PROVIDERS") or os.getenv("QUEUE_PROVIDER", "redis")
     providers = [p.strip().lower() for p in providers_str.split(",") if p.strip()]
     
@@ -103,6 +96,16 @@ def get_queue_backends(payload_type: Type[T] = JobPayload) -> list[QueueBackend[
                 aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
                 payload_type=payload_type
             ))
+        
+        elif provider == "kafka":  # ← NUEVO
+            from .kafka_queue import KafkaQueue
+            backends.append(KafkaQueue[T](
+                bootstrap_servers=os.getenv("KAFKA_BOOTSTRAP_SERVERS", "kafka:9092"),
+                topic=os.getenv("KAFKA_TOPIC_JOBS", "rag-pdf-jobs"),
+                group_id=os.getenv("KAFKA_CONSUMER_GROUP", "rag-pdf-workers"),
+                payload_type=payload_type
+            ))
+        
         else:
             logger.warning(f"⚠️ Proveedor de cola no soportado: {provider}")
     

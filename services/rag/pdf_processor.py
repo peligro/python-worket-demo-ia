@@ -13,7 +13,7 @@ from sentence_transformers import SentenceTransformer
 from sqlmodel import Session
 
 # ✅ Import local del worker
-from worker.models.rag_chunk import RAGChunk
+from models.rag_chunk import RAGChunk
 
 logger = logging.getLogger(__name__)
 

@@ -4,3 +4,7 @@ pydantic>=2.9.2
 python-dotenv>=1.0.0
 redis>=5.0.1
 boto3==1.35.87
+
+
+# Kafka
+confluent-kafka>=2.6.0

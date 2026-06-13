@@ -43,8 +43,8 @@ logger = logging.getLogger(__name__)
 # =============================================================================
 def main():
     """Punto de entrada del worker."""
-    from worker.core.worker import run_worker
-    from worker.core.signals import GracefulShutdown
+    from core.worker import run_worker
+    from core.signals import GracefulShutdown
     
     # Registrar signal handlers globalmente
     shutdown = GracefulShutdown()
