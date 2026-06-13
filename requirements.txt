@@ -1,3 +1,4 @@
+#requirements.txt
 # Dependencias base (compartidas con API)
 pydantic>=2.9.2
 python-dotenv>=1.0.0
